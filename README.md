@@ -55,6 +55,8 @@ assets/Head/ — For head images
 
 assets/Accessory/ — For accessory images (optional, can include None for no accessory)
 
+
+
 Run the Script:
 
 Edit the script to specify the number of NFTs you want to generate and the number of NFTs that should include accessories.
@@ -66,11 +68,15 @@ generate_nfts(100, accessories_per_nft=5)  # Generate 100 NFTs, with accessories
 
 This will generate the images and metadata in the output/ folder.
 
+
+
 Check the Output:
 
 Generated images will be saved in the output/ folder as nft_1.png, nft_2.png, etc.
 
 Metadata files for each NFT will be saved as nft_1.json, nft_2.json, etc., containing image paths and attributes.
+
+
 
 Customization
 Asset Categories
@@ -87,6 +93,8 @@ head: List of head images (e.g., beanie.png, visor.png).
 
 accessory: List of accessory images (e.g., bird.png, pipe.png). You can also include None to represent the case when no accessory is added.
 
+
+
 Rarity Weights
 
 You can adjust the rarity of each asset layer by modifying the rarity_weights dictionary. For example:
@@ -100,7 +108,10 @@ rarity_weights = {
 }
 
 
+
 This configuration controls how likely each asset is to be chosen. For instance, accessory: [95, 2, 2] means that there is a 95% chance that no accessory will be chosen, and a 2% chance for each accessory type.
+
+
 
 Asset Layer Control
 
@@ -120,7 +131,9 @@ generate_nfts(100, accessories_per_nft=5)  # 100 NFTs, 5 with accessories
 
 This will include accessories in 5 out of 100 NFTs. The rest will not have any accessories.
 
+
 ______________
+
 
 License
 
