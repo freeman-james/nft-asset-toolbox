@@ -3,7 +3,7 @@ from PIL import Image
 import json
 import os
 
-# Define paths to assets
+# Define paths to assets (populated based on folders)
 asset_paths = {
     'background': [
         'assets/Background/Aqua.png',
@@ -59,6 +59,9 @@ rarity_weights = {
 # Define layer order for merging
 layer_order = ['background', 'body', 'head', 'eyes', 'accessory']
 
+# To track unique combinations
+generated_combinations = set()
+
 # Function to choose an asset based on rarity
 def choose_asset(layer):
     weight = rarity_weights[layer]
@@ -75,17 +78,17 @@ def merge_assets(layers):
         asset = choose_asset(layer)
         if asset is not None:  # If the chosen asset is not None, merge it
             asset_image = Image.open(asset)
-            base_image.paste(asset_image, (0, 0), asset_image) 
+            base_image.paste(asset_image, (0, 0), asset_image)  # Assuming assets are transparent PNGs
 
     return base_image
 
 # Function to generate metadata for the NFT
 def generate_metadata(token_id, image_path, attributes):
     metadata = {
-        "name": f"NFT #{token_id}",
-        "description": "Generated NFT Collection",
-        "external_url": "https://yourwebsite.com",  # Replace with project website
-        "image": f"ipfs://your-ipfs-url/{token_id}.png",  # IPFS URL for the image - will be updated later
+        "name": f"Project Name #{token_id}",
+        "description": "Project Description",
+        "external_url": "https://example.xyz",  # project website
+        "image": f"ipfs://ipfs-url/{token_id}.png",  # IPFS URL for the image will be updated later
         "attributes": attributes,
         "tokenId": token_id,
         "properties": {
@@ -96,7 +99,7 @@ def generate_metadata(token_id, image_path, attributes):
                 }
             ]
         },
-        "symbol": "NFT_COLLECTION"
+        "symbol": "PROJECT SYMBOL"
     }
     return metadata
 
@@ -119,24 +122,34 @@ def generate_nfts(num_nfts):
     nfts_metadata = []
 
     for token_id in range(1, num_nfts + 1):
-        # Merge the layers to create the image
-        merged_image = merge_assets(layer_order)
-        image_filename = f"output/{token_id}.png"
-        merged_image.save(image_filename)
+        while True:
+            # Generate unique attributes by checking combinations
+            attributes = generate_attributes(layer_order)
+            combination = tuple([attr['value'] for attr in attributes])
+            
+            # Ensure that this combination has not been generated already
+            if combination not in generated_combinations:
+                # Mark this combination as used
+                generated_combinations.add(combination)
 
-        # Generate attributes and metadata
-        attributes = generate_attributes(layer_order)
-        metadata = generate_metadata(token_id, image_filename, attributes)
+                # Merge the layers to create the image
+                merged_image = merge_assets(layer_order)
+                image_filename = f"output/{token_id}.png"
+                merged_image.save(image_filename)
 
-        # Save the metadata as a JSON file
-        metadata_filename = f"output/{token_id}.json"
-        with open(metadata_filename, 'w') as metadata_file:
-            json.dump(metadata, metadata_file, indent=4)
+                # Generate metadata
+                metadata = generate_metadata(token_id, image_filename, attributes)
 
-        nfts_metadata.append(metadata)
+                # Save the metadata as a JSON file
+                metadata_filename = f"output/{token_id}.json"
+                with open(metadata_filename, 'w') as metadata_file:
+                    json.dump(metadata, metadata_file, indent=4)
+
+                nfts_metadata.append(metadata)
+                print(f"Generated NFT #{token_id} with unique combination.")
+                break  # Proceed to next NFT once we ensure it's unique
 
     return nfts_metadata
 
 # Example usage
-generate_nfts(200)  # Create 200 NFTs
-
+generate_nfts(200)  # Create 200 unique NFTs
