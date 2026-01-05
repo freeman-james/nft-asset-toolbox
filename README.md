@@ -42,9 +42,9 @@ generate_nfts(
     accessories_per_nft=5
 )
 
-Generated images and metadata will be written to the output/ directory.
-
 This example would generate a run of 100 randomized NFTs with 5 NFTs in the run containing accessories.
+
+Generated images and metadata will be written to the output/ directory.
 
 
 # Configuration
