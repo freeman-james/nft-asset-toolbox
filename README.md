@@ -28,7 +28,7 @@ Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/freeman-james/nft-asset-generator.git
-cd nft-asset-combining
+cd nft-asset-generator
 pip install pillow
 ```
 
